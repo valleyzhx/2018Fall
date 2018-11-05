@@ -30,10 +30,6 @@ for degree = 1:degeree
 
         nums=randperm(N,N_train);
         train = X(nums);
-        if N == N_train
-            train = X;
-        end
-        
         Y = D(nums);
         X_1 = [ones(N_train,1),train]; 
 
@@ -60,8 +56,7 @@ end
 
 %% ==================== Question 1.3 ====================%%
 N_test = 199;
-
-X_test = X(1:N_train-1,1)+1/(2*N_train-1);
+X_test = X+1/(2*N_train-1);
 
 
 

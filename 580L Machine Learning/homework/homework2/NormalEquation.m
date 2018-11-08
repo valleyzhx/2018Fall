@@ -5,5 +5,5 @@ function [W] = NormalEquation(X,Y,lambda)
     A(1,1) = 0;
     
     W = (X'*X+lambda*A)\(X')*Y;
-    
+        
 end

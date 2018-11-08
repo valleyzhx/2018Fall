@@ -1,8 +1,0 @@
-function [W] = NormalEquation(X,Y,lambda)
-    
-    [height,length] = size(X);
-    A = eye(height);
-    A(1,1) = 0;
-    W = (X'*X+lambda*A)\(X')*Y;
-W = (X_1.')*X_1\(X_1.')*Y;
-end

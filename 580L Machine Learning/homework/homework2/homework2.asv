@@ -7,56 +7,46 @@ C = A.*A;
 
 %% ==================== Question 1.1 ====================%%
 N=200;
-X(:,1) = (0:N-1)/(N-1);
-sin_x = sin(2*pi*X);
-Wn = 0 + 0.1*randn(N,1);
+x_train(:,1) = (0:N-1)/(N-1);
+sin_x = sin(2*pi*x_train);
 
-D = X+Wn;
-% figure;
-% plot(X,sin_x,X,D);
-% fprintf('\nProgram paused. Press enter to continue.\n');
-% pause;
+
+y_train = sin_x + normrnd(0,0.1,[N,1]);
+plot(x_train,sin_x,'g');
+hold on;
+plot(x_train,y_train,'bo');
+
 %% ==================== Question 1.2 ====================%%
 train_size = [10, 50, 100, 150, 200];
+orders = [0,1,2,3,9];
 
-degeree = 3;
-%pause;
-
-for degree = 1:degeree
-    fprintf('====== Degree %d Start ======\n',degree);
-    for s = 1:5
-        N_train = train_size(s);
-        fprintf(' N_train: %d\n',N_train);
-
-        nums=randperm(N,N_train);
-        train = X(nums);
-        Y = D(nums);
-        X_1 = [ones(N_train,1),train]; 
-
-        for d=1:degeree
-            if d==1
-                X_1 = [ones(N_train,1),train];
-            else
-                X_1 = [X_1,train.^d];
-            end  
-        end
-
-        W = (X_1.')*X_1\(X_1.')*Y;
-        fprintf(' omega: ');
-        fprintf('%f , ',W);
-        fprintf('\n');
-
+for s = 1:5
+        size = train_size(s);
+        fprintf(' train size: %d\n',size);
+        nums=randperm(N,size);
+        
+        X_temp = x_train(nums);
+        Y = y_train(nums);
         for lambda = 0:5
-            mse = 1/N*sum((X_1*W-Y).^2)+lambda/N*sum(W.^2);
-            fprintf('  lambda:%d => mse=%f\n',lambda,mse);
-        end
-    end
-    fprintf('====== Degree %d End ======\n',degree);
+        fprintf('  lambda: %d\n',lambda);
+            for o = 1:5
+                order = orders(o);
+                
+                X = Polynomial(X_temp,order);           
+                W = NormalEquation(X,Y,lambda);    
+                mse = 1/N*sum((X*W-Y).^2)+lambda/N*sum(W.^2);
+            fprintf('   order:%d => mse=%f\n',order,mse);
+            end
+        end        
+        
 end
+
+
 
 %% ==================== Question 1.3 ====================%%
 N_test = 199;
-X_test = X+1/(2*N_train-1);
+
+%X_test = X(1:N_train-1,1)+1/(2*N_train-1);
 
 
 

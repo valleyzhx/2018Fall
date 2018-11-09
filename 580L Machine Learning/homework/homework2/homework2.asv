@@ -20,7 +20,7 @@ orders = [0,1,2,3,9];
 lambdas = [0,1,4,9,16];
 
 MSES = [];
-OMGS = cell(125:1);
+OMGS = [];
 ind_omg = 1;
 for s = 1:5
         size = train_size(s);
@@ -37,9 +37,8 @@ for s = 1:5
                 
                 X = Polynomial(X_temp,order);           
                 W = NormalEquation(X,Y,lambda);
+           
                 
-                OMGS(ind_omg,1) = {W};
-                ind_omg =ind_omg+1;
                 fprintf('    order:%d   omega: ',order);
                 fprintf('%f ',W);
                 fprintf('\n');
@@ -74,7 +73,7 @@ N_test = 199;
 x_test = x_train+1/(2*N_test);
 y_test = y_train(1:N_test);
 
-% order - lambda - size
+
 
 
 

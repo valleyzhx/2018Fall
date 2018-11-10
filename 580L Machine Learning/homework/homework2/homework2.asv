@@ -20,8 +20,8 @@ orders = [0,1,2,3,9];
 lambdas = [0,1,4,9,16];
 
 MSES = [];
-OMGS = [];
-ind_omg = 1;
+OMGS = cell(5,5,5);
+
 for s = 1:5
         size = train_size(s);
         fprintf(' train size: %d\n',size);
@@ -37,7 +37,8 @@ for s = 1:5
                 
                 X = Polynomial(X_temp,order);           
                 W = NormalEquation(X,Y,lambda);
-           
+                
+                OMGS(o,s,lamb) = {W};
                 
                 fprintf('    order:%d   omega: ',order);
                 fprintf('%f ',W);
@@ -70,11 +71,33 @@ end
 %% ==================== Question 1.3 ====================%%
 N_test = 199;
 
-x_test = x_train+1/(2*N_test);
+x_test = x_train(1:N_test)+1/(2*N_test);
 y_test = y_train(1:N_test);
 
+% order - size - lambda
 
+Y = repmat(y_test,1,5);
 
+for i=1:5
+    mses2 = [];
+    lamCell = OMGS(:,:,i);
+    for o = 1:5
+        order = orders(o);
+        W = cell2mat(lamCell(o,:));
+        X = Polynomial(x_test,order);
+        
+        mse = sum((X*W-Y).^2)/N_test;
+        mses2(o,:)=mse;
+    end
+    
+    figure;
+    
+    plot(train_size,mses2);
+    plot(train_size,mses2(1,i),);
 
+    title(['\lambda = ',num2str(lambdas(i))]);
+    legend({'oder 0','order 1','order 2','order 3','order 9'},'Location','northwest')
+end
+ 
 
 

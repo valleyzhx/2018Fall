@@ -1,4 +1,4 @@
-
+clear ; close all; clc
 %==================== test ==============
 
 
@@ -41,7 +41,7 @@ for s = 1:5
                 OMGS(o,s,lamb) = {W};
                 
                 fprintf('    order:%d   omega: ',order);
-                fprintf('%f ',W);
+                fprintf('%f \n',W);
                 fprintf('\n');
                 
                 mse = sum((X*W-Y).^2)/size;
@@ -56,15 +56,15 @@ end
 
 
 %
-%{
+
 for i=1:5
     figure;
     plot(train_size,MSES(1,:,i),'g',train_size,MSES(2,:,i),'r',train_size,MSES(3,:,i),'b',train_size,MSES(4,:,i),'c',train_size,MSES(5,:,i),'m');
 %plot(train_size,MSES(:,:,1));
-title(['\lambda = ',num2str(i)]);
+title(['Q1.2 \lambda = ',num2str(i)]);
 legend({'oder 0','order 1','order 2','order 3','order 9'},'Location','northwest')
 end
-%}
+
 
 
 
@@ -81,23 +81,23 @@ Y = repmat(y_test,1,5);
 for i=1:5
     mses2 = [];
     lamCell = OMGS(:,:,i);
-    for o = 1:5
+    for o = 2:4
         order = orders(o);
         W = cell2mat(lamCell(o,:));
         X = Polynomial(x_test,order);
         
+        tem = X*W;
+        temY = (tem-Y).^2;
         mse = sum((X*W-Y).^2)/N_test;
         mses2(o,:)=mse;
     end
     
     figure;
     
-    plot(train_size,mses2);
-    plot(train_size,mses2(1,i),);
+    plot(train_size,mses2(2,:),train_size,mses2(3,:),train_size,mses2(4,:));
 
-    title(['\lambda = ',num2str(lambdas(i))]);
-    legend({'oder 0','order 1','order 2','order 3','order 9'},'Location','northwest')
+    title(['Q1.3 \lambda = ',num2str(lambdas(i))]);
+    legend({'order 1','order 2','order 3'},'Location','northwest')
 end
  
-
 
